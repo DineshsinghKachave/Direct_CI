@@ -1,0 +1,68 @@
+trigger:
+- main
+
+pool:
+  vmImage: 'windows-latest'
+
+ 
+stages:
+- stage: BuildStage1
+  jobs:
+  - job: Build1
+    steps:
+    - checkout: self
+
+    - script: |
+        # Compile the first C++ code using make
+        make
+      displayName: 'Build C++ Program 1'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/binaries1.zip'
+        replaceExistingArchive: true
+      displayName: 'Create Zip Archive 1'
+
+    - task: PublishBuildArtifacts@1
+
+      inputs:
+
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+
+        ArtifactName: 'binaries1'
+
+        publishLocation: 'Container'
+
+      displayName: 'Publish Artifact 1'
+
+ 
+
+- stage: BuildStage2
+
+  jobs:
+
+  - job: Build2
+    steps:
+    - script: |
+        # Compile the second C++ code using make
+        make
+      displayName: 'Build C++ Program 2'
+
+    - task: ArchiveFiles@2
+      inputs:
+        rootFolderOrFile: '$(System.DefaultWorkingDirectory)'
+        includeRootFolder: false
+        archiveType: 'zip'
+        archiveFile: '$(Build.ArtifactStagingDirectory)/binaries2.zip'
+        replaceExistingArchive: true
+      displayName: 'Create Zip Archive 2'
+ 
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'binaries2'
+        publishLocation: 'Container'
+      displayName: 'Publish Artifact 2'
