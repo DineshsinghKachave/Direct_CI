@@ -4,6 +4,14 @@ trigger:
 pool:
   vmImage: 'windows-latest'
 
+schedules:
+- cron: '0 0 * *'
+  displayName: Daily midnight build
+  branches:
+    include:
+    - main
+    - release
+
  
 stages:
 - stage: BuildStage1
