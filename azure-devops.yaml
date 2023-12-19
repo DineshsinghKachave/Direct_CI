@@ -5,8 +5,8 @@ pool:
   vmImage: 'windows-latest'
 
 schedules:
-- cron: '0 0 * *'
-  displayName: Daily midnight build
+- cron: '* * * * *'
+  displayName: Every minute build
   branches:
     include:
     - main
